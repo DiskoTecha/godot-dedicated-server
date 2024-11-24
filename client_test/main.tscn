@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7hop8pftoagj"]
+
+[ext_resource type="Script" path="res://NetworkController.gd" id="1_pcsql"]
+[ext_resource type="PackedScene" uid="uid://bhv4vwxe6fg07" path="res://MainMenu.tscn" id="2_iiour"]
+[ext_resource type="PackedScene" uid="uid://bp055um5d7brs" path="res://ground.tscn" id="3_su3q3"]
+[ext_resource type="PackedScene" uid="uid://bob0n7m3agufj" path="res://world_environment.tscn" id="4_35bex"]
+
+[node name="Main" type="Node3D"]
+
+[node name="Network" type="Node" parent="." node_paths=PackedStringArray("replicated_objects")]
+script = ExtResource("1_pcsql")
+replicated_objects = NodePath("../ReplicatedObjects")
+
+[node name="ReplicatedObjects" type="Node3D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://character.tscn")
+spawn_path = NodePath("../ReplicatedObjects")
+
+[node name="MainMenu" parent="." instance=ExtResource("2_iiour")]
+
+[node name="Ground" parent="." instance=ExtResource("3_su3q3")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("4_35bex")]
+
+[connection signal="game_joined" from="Network" to="MainMenu" method="_on_network_game_joined"]
+[connection signal="join_button_pressed" from="MainMenu" to="Network" method="_on_main_menu_join_button_pressed"]

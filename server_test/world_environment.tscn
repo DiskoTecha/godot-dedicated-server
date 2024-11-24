@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bob0n7m3agufj"]
+
+[sub_resource type="Environment" id="Environment_s8pkg"]
+background_mode = 1
+background_color = Color(0.286275, 0.533333, 0.533333, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.384229, 0.384229, 0.384229, 1)
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_ly288"]
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_s8pkg")
+camera_attributes = SubResource("CameraAttributesPractical_ly288")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.697891, 0.716205, 0, -0.716205, 0.697891, 0, 0, 0)
+light_color = Color(1, 0.878431, 0.835294, 1)
