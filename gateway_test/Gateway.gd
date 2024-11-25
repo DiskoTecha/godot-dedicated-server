@@ -2,7 +2,7 @@ extends Node
 
 var peer
 var gateway_api
-const PORT = 8911
+const PORT = 8910
 const MAX_PLAYERS = 100
 
 # Called when the node enters the scene tree for the first time.
@@ -23,9 +23,9 @@ func startServer():
 	get_tree().set_multiplayer(gateway_api, "/root/Gateway")
 	gateway_api.set_multiplayer_peer(peer)
 	
-	gateway_api.peer_connected(_on_player_connected)
-	gateway_api.peer_disconnected(_on_player_disconnected)
-	gateway_api.server_disconnected(_on_server_disconnected)
+	gateway_api.peer_connected.connect(_on_player_connected)
+	gateway_api.peer_disconnected.connect(_on_player_disconnected)
+	gateway_api.server_disconnected.connect(_on_server_disconnected)
 
 
 func _on_player_connected(id):
@@ -37,3 +37,19 @@ func _on_player_disconnected(id):
 
 func _on_server_disconnected():
 	print("Gateway server disconnected.")
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func loginRequest(username, password):
+	print("Login request received")
+	var player_id = gateway_api.get_remote_sender_id()
+	Authenticator.authenticatePlayerFromGateway(username, password, player_id)
+
+
+func returnLoginRequestToPlayer(result, player_id):
+	returnLoginRequest.rpc_id(player_id, result)
+	gateway_api.multiplayer_peer = null
+
+@rpc("authority", "call_remote", "reliable")
+func returnLoginRequest(result):
+	pass

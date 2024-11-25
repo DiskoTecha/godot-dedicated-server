@@ -2,7 +2,7 @@ extends Node
 
 var peer
 const ADDRESS = "192.168.0.235"
-const PORT = 8910
+const PORT = 8911
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -27,7 +27,14 @@ func _on_connected_ok():
 func _on_connected_fail():
 	print("Failed to connect to authenticator server")
 
+func authenticatePlayerFromGateway(username, password, player_id):
+	authenticatePlayer.rpc_id(1, username, password, player_id)
 
-@rpc("authority", "call_remote", "reliable")
+@rpc("any_peer", "call_remote", "reliable")
 func authenticatePlayer(username, password, player_id):
 	pass
+
+@rpc("authority", "call_remote", "reliable")
+func authenticationResults(result, player_id):
+	print("Authentication results received, replying to player login request")
+	Gateway.returnLoginRequestToPlayer(result, player_id)

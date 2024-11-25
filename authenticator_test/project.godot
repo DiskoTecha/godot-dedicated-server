@@ -11,5 +11,10 @@ config_version=5
 [application]
 
 config/name="authenticator_test"
+run/main_scene="res://authenticator.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+PlayerData="*res://PlayerData.gd"

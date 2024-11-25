@@ -14,3 +14,7 @@ config/name="server_test"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameServer="*res://GameServer.gd"

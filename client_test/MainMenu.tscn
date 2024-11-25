@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhv4vwxe6fg07"]
+[gd_scene load_steps=3 format=3 uid="uid://bhv4vwxe6fg07"]
 
 [ext_resource type="Script" path="res://MainMenu.gd" id="1_853en"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_sxohv"]
+font_size = 30
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,23 +14,79 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_853en")
 
-[node name="VFlowContainer" type="VFlowContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -19.0
-offset_top = -15.5
-offset_right = 19.0
-offset_bottom = 15.5
+anchors_preset = -1
+anchor_left = 0.369
+anchor_top = 0.136
+anchor_right = 0.631
+anchor_bottom = 0.864
+offset_left = -0.0880127
+offset_top = -0.128006
+offset_right = 0.0879517
+offset_bottom = 0.127991
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="JoinButton" type="Button" parent="VFlowContainer"]
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Join"
+text = "Game Title"
+label_settings = SubResource("LabelSettings_sxohv")
+horizontal_alignment = 1
 
-[connection signal="pressed" from="VFlowContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 30
+
+[node name="UsernameLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Username"
+horizontal_alignment = 1
+
+[node name="UsernameLineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "username"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 30
+
+[node name="PasswordLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Password"
+horizontal_alignment = 1
+
+[node name="PasswordLineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "password"
+secret = true
+secret_character = "▵"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 80
+
+[node name="CreateAccountButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Create Account"
+flat = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -65
+
+[node name="LoginButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+text = "Log In"
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/MarginContainer/CreateAccountButton" to="." method="_on_create_account_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/MarginContainer2/LoginButton" to="." method="_on_login_button_pressed"]

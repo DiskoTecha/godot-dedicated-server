@@ -1,14 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cfm1p6lpqntnt"]
+[gd_scene load_steps=3 format=3 uid="uid://cfm1p6lpqntnt"]
 
-[ext_resource type="Script" path="res://NetworkController.gd" id="1_1x7tk"]
 [ext_resource type="PackedScene" uid="uid://bp055um5d7brs" path="res://ground.tscn" id="2_vub6c"]
 [ext_resource type="PackedScene" uid="uid://bob0n7m3agufj" path="res://world_environment.tscn" id="3_6rc3i"]
 
 [node name="Main" type="Node3D"]
-
-[node name="NetworkController" type="Node" parent="." node_paths=PackedStringArray("replicated_objects")]
-script = ExtResource("1_1x7tk")
-replicated_objects = NodePath("../ReplicatedObjects")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://character.tscn")
