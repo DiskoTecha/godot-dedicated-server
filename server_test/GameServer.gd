@@ -1,6 +1,5 @@
 extends Node
 
-const ADDRESS = "192.168.0.235"
 const PORT = 8909
 const MAX_CONNECTIONS = 4
 
@@ -27,8 +26,7 @@ func create_game():
 
 func _on_player_connected(id):
 	print("connected")
-	var new_char = character.instantiate()
-	new_char.position = Vector3(randf() * 20.0 - 10.0, 1.0, randf() * 20.0 - 10.0)
+	PlayerVerification.start(id)
 
 
 func _on_player_disconnected(id):
@@ -37,3 +35,15 @@ func _on_player_disconnected(id):
 
 func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func giveTokenToServer(token):
+	PlayerVerification.verify(get_tree().get_rpc_sender_id(), token)
+
+@rpc("authority", "call_remote", "reliable")
+func requestTokenFromPlayer():
+	pass
+
+func fetchToken(player_id):
+	requestTokenFromPlayer.rpc_id(player_id)

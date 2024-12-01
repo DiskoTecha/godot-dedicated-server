@@ -1,6 +1,5 @@
 extends Node
 
-const ADDRESS = "192.168.0.235"
 const PORT = 8910
 const MAX_CONNECTIONS = 4
 var peer

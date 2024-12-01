@@ -4,7 +4,7 @@ var peer
 var gateway_api
 var username
 var password
-const ADDRESS = "192.168.0.235"
+const ADDRESS = "192.168.1.39"
 const PORT = 8910
 
 
@@ -49,15 +49,15 @@ func requestLogin():
 
 
 @rpc("authority", "call_remote", "reliable")
-func returnLoginRequest(result):
+func returnLoginRequest(result, token):
 	print("Login result received")
 	
 	if result == true:
+		GameServer.token = token
 		GameServer.connectToServer()
-		get_node("../Main/MainMenu").queue_free()
 	else:
 		print("Incorrect username and/or password")
-		gateway_api.set_multiplayer_peer(null)
+		gateway_api.multiplayer_peer.disconnect_peer(1)
 		#TODO create popup saying username and/or password are incorrect
 		get_node("../Main/MainMenu/VBoxContainer/HBoxContainer/MarginContainer2/LoginButton").disabled = false
 	

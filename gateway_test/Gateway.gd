@@ -46,10 +46,10 @@ func loginRequest(username, password):
 	Authenticator.authenticatePlayerFromGateway(username, password, player_id)
 
 
-func returnLoginRequestToPlayer(result, player_id):
-	returnLoginRequest.rpc_id(player_id, result)
-	gateway_api.multiplayer_peer = null
+func returnLoginRequestToPlayer(result, player_id, token):
+	returnLoginRequest.rpc_id(player_id, result, token)
+
 
 @rpc("authority", "call_remote", "reliable")
-func returnLoginRequest(result):
+func returnLoginRequest(result, token):
 	pass

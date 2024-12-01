@@ -1,6 +1,6 @@
 extends Node
 
-const ADDRESS = "192.168.0.235"
+const ADDRESS = "192.168.1.39"
 const PORT = 8909
 const MAX_CONNECTIONS = 4
 
@@ -8,6 +8,8 @@ const MAX_CONNECTIONS = 4
 @export var replicated_objects: Node3D
 var joining_game = false
 var peer
+var token
+
 
 func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_ok)
@@ -38,3 +40,12 @@ func _on_connected_fail():
 
 func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func giveTokenToServer(token):
+	pass
+
+@rpc("authority", "call_remote", "reliable")
+func requestTokenFromPlayer():
+	giveTokenToServer.rpc_id(1, token)
