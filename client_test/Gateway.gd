@@ -4,7 +4,7 @@ var peer
 var gateway_api
 var username
 var password
-const ADDRESS = "192.168.1.39"
+const ADDRESS = "192.168.0.235"
 const PORT = 8910
 
 

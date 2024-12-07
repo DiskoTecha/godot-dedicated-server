@@ -56,7 +56,7 @@ func authenticatePlayer(username, password, player_id):
 		result = true
 		
 		token = str(randi()).sha256_text() + str(Time.get_unix_time_from_system())
-		var game_server = "GameServer1"
+		var game_server = "Alpha"
 		GameServers.distributeLoginToken(token, game_server)
 	
 	print("Authentication result sent to gateway server")

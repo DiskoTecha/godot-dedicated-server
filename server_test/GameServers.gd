@@ -1,9 +1,9 @@
 extends Node
 
 var peer
-var authenticator_to_game_servers_api
+var authenticator_to_game_servers_api: MultiplayerAPI
 const PORT = 8912
-const ADDRESS = "192.168.1.39"
+const ADDRESS = "192.168.0.235"
 
 var expected_game_tokens = []
 
@@ -23,7 +23,7 @@ func connectToServer():
 	var error = peer.create_client(ADDRESS, PORT)
 	if error:
 		return error
-	authenticator_to_game_servers_api = MultiplayerAPI.get_default_interface()
+	authenticator_to_game_servers_api = MultiplayerAPI.create_default_interface()
 	get_tree().set_multiplayer(authenticator_to_game_servers_api, "/root/GameServers")
 	authenticator_to_game_servers_api.set_multiplayer_peer(peer)
 	
@@ -34,6 +34,7 @@ func connectToServer():
 
 func _on_connected_ok():
 	print("Connected to authenticator ok.")
+	passServerName.rpc_id(1, "Alpha")
 
 
 func _on_connected_fail():
@@ -47,6 +48,7 @@ func _on_server_disconnected():
 @rpc("authority", "call_remote", "reliable")
 func passLoginToken(token):
 	expected_game_tokens.append(token)
+	print(expected_game_tokens)
 
 
 func _on_token_expiration_timer_timeout():
@@ -56,8 +58,13 @@ func _on_token_expiration_timer_timeout():
 		pass
 	else:
 		for i in range(expected_game_tokens.size() - 1, -1, -1):
-			token_time = int(expected_game_tokens[i].right(64))
+			token_time = int(expected_game_tokens[i].right(14))
 			if current_time - token_time >= 30:
 				expected_game_tokens.remove(i)
 	print("Expected game tokens:")
 	print(expected_game_tokens)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func passServerName(server_name):
+	pass

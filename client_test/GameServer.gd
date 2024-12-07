@@ -1,6 +1,6 @@
 extends Node
 
-const ADDRESS = "192.168.1.39"
+const ADDRESS = "192.168.0.235"
 const PORT = 8909
 const MAX_CONNECTIONS = 4
 
@@ -28,6 +28,7 @@ func connectToServer():
 		multiplayer.multiplayer_peer = peer
 		joining_game = false
 
+
 func _on_connected_ok():
 	print("connected ok")
 	var peer_id = multiplayer.get_unique_id()
@@ -46,6 +47,18 @@ func _on_server_disconnected():
 func giveTokenToServer(token):
 	pass
 
+
 @rpc("authority", "call_remote", "reliable")
 func requestTokenFromPlayer():
 	giveTokenToServer.rpc_id(1, token)
+
+
+@rpc("authority", "call_remote", "reliable")
+func sendVerificationResults(results):
+	if results == true:
+		get_node("../Main/MainMenu").queue_free()
+		print("Successful token verification")
+	else:
+		#TODO create popup alerting user the login failed
+		print("Token verification failed, please try again")
+		get_node("../Main/MainMenu/VBoxContainer/HBoxContainer/MarginContainer2/LoginButton").disabled = false

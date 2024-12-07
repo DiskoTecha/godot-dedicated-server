@@ -26,7 +26,7 @@ func create_game():
 
 func _on_player_connected(id):
 	print("connected")
-	PlayerVerification.start(id)
+	PlayerVerification.start(str(id))
 
 
 func _on_player_disconnected(id):
@@ -39,11 +39,23 @@ func _on_server_disconnected():
 
 @rpc("any_peer", "call_remote", "reliable")
 func giveTokenToServer(token):
-	PlayerVerification.verify(get_tree().get_rpc_sender_id(), token)
+	PlayerVerification.verify(str(multiplayer.get_remote_sender_id()), token)
+	print("sender id = " + str(multiplayer.get_remote_sender_id()))
+
 
 @rpc("authority", "call_remote", "reliable")
 func requestTokenFromPlayer():
 	pass
 
+
+@rpc("authority", "call_remote", "reliable")
+func sendVerificationResults(results):
+	pass
+
+
 func fetchToken(player_id):
 	requestTokenFromPlayer.rpc_id(player_id)
+
+
+func returnTokenVerificationResults(player_id, results):
+	sendVerificationResults.rpc_id(int(player_id), results)

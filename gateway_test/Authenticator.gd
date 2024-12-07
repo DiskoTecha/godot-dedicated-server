@@ -1,7 +1,7 @@
 extends Node
 
 var peer
-const ADDRESS = "192.168.1.39"
+const ADDRESS = "192.168.0.235"
 const PORT = 8911
 
 # Called when the node enters the scene tree for the first time.
