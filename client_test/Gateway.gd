@@ -7,6 +7,7 @@ var password
 const ADDRESS = "192.168.0.235"
 const PORT = 8910
 
+var cert = load("res://Resources/Certificate/X509_Certificate.crt")
 
 func _ready():
 	pass
@@ -18,6 +19,9 @@ func connectToServer(_username, _password):
 	peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(ADDRESS, PORT)
 	gateway_api = MultiplayerAPI.create_default_interface()
+	
+	peer.host.dtls_client_setup("ip:port", TLSOptions.client_unsafe(cert))
+	
 	get_tree().set_multiplayer(gateway_api, "/root/Gateway")
 	gateway_api.set_multiplayer_peer(peer)
 	

@@ -5,6 +5,9 @@ var gateway_api
 const PORT = 8910
 const MAX_PLAYERS = 100
 
+var cert = load("res://Certificate/X509_Certificate.crt")
+var key = load("res://Certificate/X509_Key.key")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -20,6 +23,9 @@ func startServer():
 	peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(PORT, MAX_PLAYERS)
 	gateway_api = MultiplayerAPI.create_default_interface()
+	
+	peer.host.dtls_server_setup(TLSOptions.server(key, cert))
+	
 	get_tree().set_multiplayer(gateway_api, "/root/Gateway")
 	gateway_api.set_multiplayer_peer(peer)
 	
