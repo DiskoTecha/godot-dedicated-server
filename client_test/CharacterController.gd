@@ -7,9 +7,15 @@ const JUMP_VELOCITY = 4.5
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+var playerState
 
 func _physics_process(delta):
-	# Add the gravity.
+	movementLoop(delta)
+	definePlayerState()
+
+
+func movementLoop(delta):
+		# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
@@ -29,3 +35,8 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+
+
+func definePlayerState():
+	playerState = {"T": Time.get_unix_time_from_system(), "P": global_position}
+	GameServer.sendPlayerState(playerState)

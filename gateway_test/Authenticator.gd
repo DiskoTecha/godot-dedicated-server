@@ -30,9 +30,26 @@ func _on_connected_fail():
 func authenticatePlayerFromGateway(username, password, player_id):
 	authenticatePlayer.rpc_id(1, username, password, player_id)
 
+
+func createAccountFromGateway(username, password, player_id):
+	createAccount.rpc_id(1, username, password, player_id)
+
+
 @rpc("any_peer", "call_remote", "reliable")
 func authenticatePlayer(username, password, player_id):
 	pass
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func createAccount(username, password, player_id):
+	pass
+
+
+@rpc("authority", "call_remote", "reliable")
+func createAccountResults(player_id, message_flag):
+	print("Create account results received, replying to player create account request")
+	Gateway.returnCreateAccountRequestToPlayer(player_id, message_flag)
+
 
 @rpc("authority", "call_remote", "reliable")
 func authenticationResults(result, player_id, token):

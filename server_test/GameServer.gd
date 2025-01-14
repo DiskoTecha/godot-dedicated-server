@@ -9,6 +9,8 @@ const MAX_CONNECTIONS = 4
 @onready var character = preload("res://character.tscn")
 @onready var peer = ENetMultiplayerPeer.new()
 
+var playerStateCollection = {}
+
 func _ready():
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
@@ -31,6 +33,10 @@ func _on_player_connected(id):
 
 func _on_player_disconnected(id):
 	print("disconnected")
+	playerStateCollection.erase(str(id))
+	despawnPlayer.rpc(id)
+	print(playerStateCollection)
+
 
 
 func _on_server_disconnected():
@@ -53,9 +59,62 @@ func sendVerificationResults(results):
 	pass
 
 
+@rpc("authority", "call_remote", "reliable")
+func spawnPlayer(player_id: int, startPosition: Vector3):
+	pass
+
+
+@rpc("authority", "call_remote", "reliable")
+func despawnPlayer(player_id: int):
+	pass
+
+
+@rpc("any_peer", "call_remote", "unreliable")
+func receivePlayerState(playerState):
+	var player_id = str(multiplayer.get_remote_sender_id())
+	if playerStateCollection.has(player_id):
+		if playerStateCollection[player_id]["T"] < playerState["T"]:
+			playerStateCollection[player_id] = playerState
+	else:
+		playerStateCollection[player_id] = playerState
+
+
+@rpc("authority", "call_remote", "unreliable")
+func receiveWorldState(worldState):
+	pass
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func fetchServerTime(clientTime):
+	var playerId = multiplayer.get_remote_sender_id()
+	returnServerTime.rpc_id(playerId, Time.get_unix_time_from_system(), clientTime)
+
+
+@rpc("authority", "call_remote", "reliable")
+func returnServerTime(serverTime, clientTime):
+	pass
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func determineLatencyFromServer(clientTime):
+	var playerId = multiplayer.get_remote_sender_id()
+	returnLatency.rpc_id(playerId, clientTime)
+
+
+@rpc("authority", "call_remote", "reliable")
+func returnLatency(clientTime):
+	pass
+
+
 func fetchToken(player_id):
 	requestTokenFromPlayer.rpc_id(player_id)
 
 
 func returnTokenVerificationResults(player_id, results):
 	sendVerificationResults.rpc_id(int(player_id), results)
+	if results == true:
+		spawnPlayer.rpc(int(player_id), Vector3(-5, 0, -5))
+
+
+func sendWorldState(worldState):
+	receiveWorldState.rpc(worldState)

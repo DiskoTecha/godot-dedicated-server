@@ -5,12 +5,6 @@
 
 [node name="Main" type="Node3D"]
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://character.tscn")
-spawn_path = NodePath("../ReplicatedObjects")
-
-[node name="ReplicatedObjects" type="Node3D" parent="."]
-
 [node name="Ground" parent="." instance=ExtResource("2_vub6c")]
 
 [node name="Camera3D" type="Camera3D" parent="."]

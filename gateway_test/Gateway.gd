@@ -52,8 +52,29 @@ func loginRequest(username, password):
 	Authenticator.authenticatePlayerFromGateway(username, password, player_id)
 
 
+@rpc("any_peer", "call_remote", "reliable")
+func createAccountRequest(username, password):
+	var player_id = gateway_api.get_remote_sender_id()
+	var request_valid = username != "" and password != "" and password.length() > 6
+	if not request_valid:
+		returnCreateAccountRequestToPlayer(player_id, 1)
+	else:
+		Authenticator.createAccountFromGateway(username.to_lower(), password, player_id)
+
+
 func returnLoginRequestToPlayer(result, player_id, token):
 	returnLoginRequest.rpc_id(player_id, result, token)
+
+
+func returnCreateAccountRequestToPlayer(player_id, message_flag):
+	print("Returning create account request to player with message_flag = " + str(message_flag))
+	returnCreateAccountRequest.rpc_id(player_id, message_flag)
+	# message_flag: 1 == failed, 2 == username exists already, 3 == success
+
+
+@rpc("authority", "call_remote", "reliable")
+func returnCreateAccountRequest(message_flag):
+	pass
 
 
 @rpc("authority", "call_remote", "reliable")
